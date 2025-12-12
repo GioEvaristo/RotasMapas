@@ -1,3 +1,6 @@
+// Grupo: Gabriel Machado, Giovanna Fonseca, Julia Garcia e Pedro Henrique Liló
+// Atividade 03 - Maps // Rota do ET
+
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button, ActivityIndicator, Image } from 'react-native';
@@ -27,71 +30,70 @@ export default function App() {
   const rotas = [
     {
       id: 1,
-      nome: 'Local onde o ET foi avistado',
-      descricao: 'Local onde três jovens avistaram a criatura em 1996',
-      latitude: -21.564025562258795,
-      longitude: -45.43441835930718,
+      nome: 'Terreno em que ET teria sido visto por meninas',
+      descricao: 'Rua Dr. Benevenuto Braz Viêira, 21 - Vila Andere',
+      latitude: -21.568298300296714,
+      longitude: -45.43423220696292,
       imagem: require('./assets/terreno.webp'),
     },
     {
       id: 2,
-      nome: 'Muro do Caso ET de Varginha',
-      descricao: 'Muro onde a criatura teria sido vista',
-      latitude: -21.568176308046525,
-      longitude: -45.43424669793189,
-      imagem: require('./assets/zoovarginha.png'),
-    },
-    {
-      id: 3,
-      nome: 'Parque do Jardim Andere',
-      descricao: 'Local onde o ET teria sido capturado',
-      latitude: -21.569253886077195,
-      longitude: -45.4316717773026,
-      imagem: require('./assets/estatuaet2.png'),
-    },
-    {
-      id: 4,
       nome: 'Memorial do ET',
-      descricao: 'Memorial em homenagem ao caso',
-      latitude: -21.53923603131077, 
-      longitude: -45.437034091792334,
+      descricao: 'R. Maria Paiva Pinto, 105 - Vila Paiva',
+      latitude: -21.53944157296884, 
+      longitude: -45.43689312383651,
       imagem: require('./assets/memorial.png'),
     },
     {
-      id: 5,
-      nome: 'Nave Espacial - Caixa d\'água',
-      descricao: 'Caixa d\'água decorada como nave espacial',
+      id: 3,
+      nome: 'Nave Espacial e Estátua do ET',
+      descricao: 'Praça Getúlio Vargas, 193 - Centro',
       latitude: -21.55930627625668,
       longitude: -45.43999730338807,
       imagem: require('./assets/nave.png'),
     },
     {
-      id: 6,
-      nome: 'Estátua do E.T.',
-      descricao: 'Famosa estátua do ET na entrada da cidade',
-      latitude: -21.559014037565408,
-      longitude: -45.43996030327279,
-      imagem: require('./assets/estatuaet.png'),
+      id: 4,
+      nome: 'Estátuas com formato do ‘verdadeiro’ ET',
+      descricao: 'Praça José R. Paiva - Centro',
+      latitude: -21.55720673416103, 
+      longitude: -45.43842937385777,
+      imagem: require('./assets/estatuaet2.png'),
     },
     {
-      id: 7,
+      id: 5,
       nome: 'Ponto de ônibus temático',
-      descricao: 'Ponto de ônibus decorado com tema do ET',
-      latitude: -21.566546331459534,
-      longitude: -45.43692901202004,
+      descricao: 'Av. Francisco Navarra, 425',
+      latitude: -21.566611540623995, 
+      longitude: -45.43696405587806,
       imagem: require('./assets/pontodeonibus.png'),
     },
     {
-      id: 8,
+      id: 6,
+      nome: 'Zoológico de Varginha',
+      descricao: 'R. Petrópolis - Jardim Petropolis',
+      latitude: -21.56777478239457, 
+      longitude: -45.44578910437535,
+      imagem: require('./assets/zoovarginha.png'),
+    },
+    {
+      id: 7,
       nome: 'Prefeitura Municipal',
-      descricao: 'Centro administrativo com referências ao caso',
-      latitude: -21.542714641095984,
-      longitude: -45.444452669682306,
+      descricao: 'R. Júlio Paulo Marcelini, 50',
+      latitude: -21.544688046723167, 
+      longitude: -45.44453380612826,
       imagem: require('./assets/prefeituraelevador.png'),
+    },
+    {
+      id: 8,
+      nome: 'Aeroporto de Varginha',
+      descricao: 'Aeroporto, Varginha - MG',
+      latitude: -21.588588533252317, 
+      longitude: -45.47640492882973,
+      imagem: require('./assets/aeroporto.png'),
     },
   ];
 
-  // Função para buscar rota entre dois pontos
   const buscarRota = async (origem, destino) => {
     try {
       setCarregandoRota(true);
@@ -120,7 +122,6 @@ export default function App() {
     }
   };
 
-  // useEffect para solicitar permissão e obter localização
   useEffect(() => {
     (async () => {
       try {
@@ -143,25 +144,20 @@ export default function App() {
     })();
   }, []);
 
-  // useEffect para animar mudança de região
   useEffect(() => {
     if (!carrega && mapRef.current) {
       mapRef.current.animateToRegion(region, 2000);
     }
   }, [region]);
 
-  // Função para navegar pelos pontos da rota
   const irParaOutroLocal = () => {
     const pontoAtual = rotas[index];
     const proximoIndex = (index + 1) % rotas.length;
     const proximoPonto = rotas[proximoIndex];
-    
-    // Buscar rota entre ponto atual e próximo
-    buscarRota(
+        buscarRota(
       { latitude: pontoAtual.latitude, longitude: pontoAtual.longitude },
       { latitude: proximoPonto.latitude, longitude: proximoPonto.longitude }
     );
-    
     setRegion({
       latitude: proximoPonto.latitude,
       longitude: proximoPonto.longitude,
@@ -172,17 +168,6 @@ export default function App() {
     setIndex(proximoIndex);
   };
 
-  // Tela de carregamento
-  if (carrega) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size='large' color='#4CAF50' />
-        <Text style={styles.loadingText}>Carregando mapa...</Text>
-      </View>
-    );
-  }
-
-  // Tela quando permissão é negada
   if (permissaoNegada) {
     return (
       <View style={styles.container}>
@@ -202,7 +187,7 @@ export default function App() {
               >
                 <Image 
                   source={item.imagem} 
-                  style={{ width: 40, height: 40 }}
+                  style={{ width: 80, height: 80 }}
                   resizeMode="contain"
                 />
               </Marker>
@@ -245,10 +230,15 @@ export default function App() {
       </View>
     );
   }
-
-  // Tela principal com localização habilitada
+  
   return (
     <View style={styles.container}>
+      <View style={styles.infoContainer}>
+        <Text style={styles.titleText}>Rota do ET de Varginha</Text>
+        <Text style={styles.infoText}>
+          Explore os 8 pontos turísticos da Rota do ET em Varginha!!
+        </Text>
+      </View>
       <View style={styles.mapContainer}>
         <MapView
           style={styles.map}
@@ -275,24 +265,16 @@ export default function App() {
           {rota.length > 0 && (
             <Polyline
               coordinates={rota}
-              strokeColor="#E91E63"
+              strokeColor="#19f619ff"
               strokeWidth={5}
               lineDashPattern={[10, 10]}
             />
           )}
         </MapView>
       </View>
-      
-      <View style={styles.infoContainer}>
-        <Text style={styles.titleText}>Rota do ET de Varginha</Text>
-        <Text style={styles.infoText}>
-          Explore {rotas.length} pontos turísticos da lendária Rota do ET
-        </Text>
-      </View>
-      
       <View style={styles.buttonContainer}>
         <Button 
-          title={`Visitar: ${rotas[index].nome}`} 
+          title={`Você está em: ${rotas[index].nome}`} 
           onPress={irParaOutroLocal}
           color="#4CAF50"
         />
@@ -346,6 +328,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
     marginBottom: 5,
+    marginTop: 40,
   },
   infoText: {
     fontSize: 16,
@@ -361,6 +344,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     padding: 10,
     width: '100%',
+    marginBottom: 40,
   },
   loadingOverlay: {
     position: 'absolute',
